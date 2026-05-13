@@ -544,7 +544,7 @@ async function loadData(){
   try{
 
     resultsContainer.innerHTML =
-      `<div class="loading">🍡 Memuat database AI profesi...</div>`;
+      `<div class="loading">🍡 Memuat database profesi... 🍡</div>`;
 
     const response = await fetch(CSV_URL);
 
@@ -565,8 +565,8 @@ async function loadData(){
 
     resultsContainer.innerHTML = `
       <div class="empty">
-        🍡 AI profession engine berhasil dimuat.<br>
-        Mulai ketik pekerjaan untuk mencari rekomendasi profesi.
+        🍡 Database profesi berhasil dimuat 🍡<br>
+        Mulai ketik pekerjaan untuk mencari rekomendasi profesi
       </div>
     `;
 
@@ -576,7 +576,7 @@ async function loadData(){
 
     resultsContainer.innerHTML = `
       <div class="empty">
-        Gagal memuat database spreadsheet 😢
+        Gagal memuat database profesi 😢
       </div>
     `;
 
