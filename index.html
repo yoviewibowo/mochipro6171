@@ -1,3 +1,5 @@
+# MOCHIPRO6171 — FULL AI SMART SEARCH HTML
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -229,12 +231,11 @@ body{
     </div>
 
     <div class="subtitle">
-      Mesin Otomatis Coding Hasil Isian Profesi<br>
-      AI Smart Search Kode Profesi SE2026
+      Mesin Otomatis Coding Hasil Isian Kode Profesi<br>
     </div>
 
     <div class="badge">
-      AI Semantic Search + NLP Indonesia
+      by yovie.wibowo
     </div>
 
   </div>
@@ -255,7 +256,7 @@ body{
   <div class="results" id="results"></div>
 
   <div class="footer">
-    MOCHIPRO6171 • AI Occupation Matching Engine
+    MOCHIPRO6171 • SE2026
   </div>
 
 </div>
@@ -324,23 +325,200 @@ const hierarchyMap = {
 
 const synonymMap = {
 
-  'ngajar': 'guru',
+  // TRANSPORTASI
   'ngojek': 'ojek online',
+  'ojol': 'ojek online',
   'gojek': 'ojek online',
   'grab': 'ojek online',
-  'jualan': 'pedagang',
-  'barber': 'tukang cukur',
-  'mua': 'penata rias',
+  'maxim': 'ojek online',
+  'antar makanan': 'ojek online',
+  'driver online': 'ojek online',
+  'kurir makanan': 'ojek online',
   'driver': 'sopir',
-  'ngecat': 'tukang cat',
-  'masak': 'juru masak',
-  'kopi': 'barista',
+  'nyopir': 'sopir',
+  'supir': 'sopir',
+  'angkot': 'sopir',
+  'travel': 'sopir',
+  'truk': 'sopir',
+  'bus': 'sopir',
+  'ekspedisi': 'kurir',
+  'antar paket': 'kurir',
+  'delivery': 'kurir',
+  'paket': 'kurir',
+
+  // PENDIDIKAN
+  'ngajar': 'guru',
+  'mengajar': 'guru',
+  'guru les': 'guru',
+  'les privat': 'guru',
+  'tentor': 'guru',
+  'bimbel': 'guru',
+  'kuliah': 'dosen',
+  'universitas': 'dosen',
+  'kampus': 'dosen',
+
+  // TEKNOLOGI
   'coding': 'programmer',
-  'programming': 'programmer',
+  'ngoding': 'programmer',
+  'developer': 'programmer',
+  'web developer': 'programmer',
+  'frontend': 'programmer',
+  'backend': 'programmer',
+  'fullstack': 'programmer',
+  'it': 'programmer',
+  'software': 'programmer',
+  'website': 'programmer',
+  'aplikasi': 'programmer',
+
+  // KONTEN DIGITAL
   'konten': 'kreator konten',
+  'content creator': 'kreator konten',
+  'youtuber': 'kreator konten',
+  'tiktoker': 'kreator konten',
+  'streamer': 'kreator konten',
+  'influencer': 'kreator konten',
+  'selebgram': 'kreator konten',
   'youtube': 'kreator konten',
   'tiktok': 'kreator konten',
-  'ngejahit': 'penjahit'
+  'instagram': 'kreator konten',
+  'live streaming': 'kreator konten',
+
+  // PERDAGANGAN
+  'jualan': 'pedagang',
+  'dagang': 'pedagang',
+  'seller': 'pedagang',
+  'reseller': 'pedagang online',
+  'dropship': 'pedagang online',
+  'affiliate': 'pedagang online',
+  'shopee': 'pedagang online',
+  'tokopedia': 'pedagang online',
+  'tiktok shop': 'pedagang online',
+  'marketplace': 'pedagang online',
+  'sales': 'pekerja profesional penjualan',
+  'marketing': 'pekerja profesional penjualan',
+  'spg': 'pekerja profesional penjualan',
+  'promosi': 'pekerja profesional penjualan',
+
+  // MAKANAN & MINUMAN
+  'masak': 'juru masak',
+  'memasak': 'juru masak',
+  'koki': 'chef',
+  'cook': 'chef',
+  'dapur': 'chef',
+  'barista': 'pembuat minuman',
+  'kopi': 'pembuat minuman',
+  'cafe': 'pembuat minuman',
+  'bartender': 'pembuat minuman',
+  'waiter': 'pramusaji',
+  'waitress': 'pramusaji',
+  'pelayan restoran': 'pramusaji',
+
+  // KECANTIKAN
+  'barber': 'tukang cukur',
+  'pangkas': 'tukang cukur',
+  'salon': 'penata rambut',
+  'hair stylist': 'penata rambut',
+  'mua': 'penata rias',
+  'makeup': 'penata rias',
+  'rias pengantin': 'penata rias',
+  'stylist': 'penata busana',
+  'fashion': 'perancang busana/desainer',
+  'designer': 'perancang busana/desainer',
+
+  // KESEHATAN
+  'dokter': 'dokter umum',
+  'klinik': 'dokter umum',
+  'rumah sakit': 'perawat',
+  'nakes': 'perawat',
+  'bidan desa': 'bidan',
+  'apotik': 'apoteker',
+  'farmasi': 'apoteker',
+  'konseling': 'psikolog',
+  'kejiwaan': 'psikiater',
+
+  // KONSTRUKSI & TEKNIK
+  'bangunan': 'tukang bangunan',
+  'kuli': 'tukang bangunan',
+  'proyek': 'tukang bangunan',
+  'ngecat': 'tukang cat',
+  'cat rumah': 'tukang cat',
+  'las': 'tukang las/pandai besi',
+  'welding': 'tukang las/pandai besi',
+  'listrik': 'tukang listrik',
+  'instalasi listrik': 'tukang listrik',
+  'pipa': 'tukang pipa',
+  'plumbing': 'tukang pipa',
+  'mebel': 'tukang kayu',
+  'furniture': 'tukang kayu',
+  'kaca': 'tukang kaca',
+  'kunci': 'tukang kunci',
+  'ban bocor': 'tukang tambal ban',
+  'tambal ban': 'tukang tambal ban',
+  'servis': 'mekanik',
+  'bengkel': 'mekanik',
+  'teknisi': 'teknisi',
+  'maintenance': 'teknisi',
+
+  // KEAMANAN
+  'satpam': 'penjaga keamanan/satpam',
+  'security': 'penjaga keamanan/satpam',
+  'pengamanan': 'penjaga keamanan/satpam',
+  'polisi': 'polisi',
+  'polri': 'polisi',
+  'tentara': 'tentara nasional indonesia (tni)',
+  'tni': 'tentara nasional indonesia (tni)',
+  'damkar': 'petugas pemadam kebakaran',
+
+  // MEDIA & SENI
+  'wartawan': 'wartawan',
+  'jurnalis': 'wartawan',
+  'reporter': 'wartawan',
+  'fotografi': 'fotografer',
+  'foto': 'fotografer',
+  'kamera': 'fotografer',
+  'videografer': 'kameramen',
+  'shooting': 'kameramen',
+  'radio': 'penyiar radio',
+  'tv': 'penyiar televisi',
+  'presenter': 'penyiar televisi',
+  'musik': 'pelaku ekosistem musik',
+  'band': 'pelaku ekosistem musik',
+  'film': 'pelaku ekosistem perfilman',
+  'bioskop': 'pelaku ekosistem perfilman',
+  'teater': 'pelaku ekosistem seni pertunjukan',
+  'tari': 'pelaku ekosistem seni pertunjukan',
+  'lukis': 'pelaku ekosistem seni rupa dan kriya',
+  'pelukis': 'pelaku ekosistem seni rupa dan kriya',
+
+  // PEMERINTAHAN
+  'kades': 'kepala desa',
+  'sekdes': 'perangkat desa',
+  'desa': 'perangkat desa',
+  'camat': 'camat',
+  'kelurahan': 'lurah',
+  'pemda': 'pns struktural',
+  'asn': 'pns fungsional umum',
+  'pegawai negeri': 'pns fungsional umum',
+  'pppk': 'pegawai pemerintah dengan perjanjian kerja (pppk)',
+
+  // RELIGI
+  'ustad': 'ustaz/mubalig',
+  'ceramah': 'ustaz/mubalig',
+  'imam': 'imam masjid',
+  'pendeta': 'pendeta',
+  'pastor': 'pastor',
+  'uskup': 'uskup',
+
+  // LAINNYA
+  'rt': 'ketua organisasi',
+  'admin': 'tenaga tata usaha',
+  'administrasi': 'tenaga tata usaha',
+  'office': 'sekretaris',
+  'receptionist': 'resepsionis',
+  'laundry': 'tenaga cuci',
+  'cleaning service': 'tenaga kebersihan',
+  'cs': 'operator layanan pelanggan',
+  'customer service': 'operator layanan pelanggan'
 
 };
 
