@@ -1,258 +1,237 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MOCHIPRO6171</title>
+<title>MOCHIPRO6171</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins',sans-serif;
-    }
+<style>
 
-    body{
-      background:
-        radial-gradient(circle at top left,#ffb86b22,transparent 30%),
-        radial-gradient(circle at bottom right,#ff8c4222,transparent 30%),
-        linear-gradient(135deg,#151515,#222222);
-      min-height:100vh;
-      color:white;
-      overflow-x:hidden;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
-    .container{
-      width:100%;
-      max-width:1000px;
-      margin:auto;
-      padding:40px 20px 80px;
-    }
+body{
+  background:
+    radial-gradient(circle at top left,#ffb86b22,transparent 30%),
+    radial-gradient(circle at bottom right,#ff8c4222,transparent 30%),
+    linear-gradient(135deg,#151515,#222222);
+  min-height:100vh;
+  color:white;
+  overflow-x:hidden;
+}
 
-    .hero{
-      text-align:center;
-      margin-bottom:40px;
-      animation:fadeUp 0.7s ease;
-    }
+.container{
+  width:100%;
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px 80px;
+}
 
-    .logo{
-      font-size:58px;
-      font-weight:700;
-      background:linear-gradient(90deg,#ffcc70,#ff9f43);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:12px;
-    }
+.hero{
+  text-align:center;
+  margin-bottom:40px;
+}
 
-    .subtitle{
-      opacity:0.8;
-      font-size:15px;
-      line-height:1.7;
-      max-width:700px;
-      margin:auto;
-    }
+.logo{
+  font-size:58px;
+  font-weight:700;
+  background:linear-gradient(90deg,#ffcc70,#ff9f43);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
 
-    .search-container{
-      position:sticky;
-      top:15px;
-      z-index:999;
-      margin-bottom:30px;
-      animation:fadeUp 0.9s ease;
-    }
+.subtitle{
+  opacity:0.8;
+  font-size:15px;
+  line-height:1.8;
+  max-width:700px;
+  margin:auto;
+}
 
-    .search-box{
-      position:relative;
-      backdrop-filter:blur(12px);
-    }
+.badge{
+  display:inline-block;
+  margin-top:16px;
+  padding:6px 14px;
+  border-radius:999px;
+  background:rgba(255,179,71,0.12);
+  color:#ffcc70;
+  font-size:12px;
+  border:1px solid rgba(255,179,71,0.15);
+}
 
-    .search-input{
-      width:100%;
-      border:none;
-      outline:none;
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.08);
-      color:white;
-      font-size:18px;
-      padding:20px 24px;
-      border-radius:24px;
-      transition:0.3s;
-    }
+.search-container{
+  position:sticky;
+  top:15px;
+  z-index:999;
+  margin-bottom:25px;
+}
 
-    .search-input:focus{
-      background:rgba(255,255,255,0.12);
-      border:1px solid rgba(255,179,71,0.5);
-      box-shadow:0 0 0 4px rgba(255,179,71,0.15);
-    }
+.search-input{
+  width:100%;
+  border:none;
+  outline:none;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.08);
+  color:white;
+  font-size:18px;
+  padding:20px 24px;
+  border-radius:24px;
+  transition:0.3s;
+}
 
-    .search-input::placeholder{
-      color:#cfcfcf;
-    }
+.search-input:focus{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,179,71,0.5);
+  box-shadow:0 0 0 4px rgba(255,179,71,0.15);
+}
 
-    .result-info{
-      margin-bottom:20px;
-      opacity:0.75;
-      font-size:14px;
-    }
+.search-input::placeholder{
+  color:#cfcfcf;
+}
 
-    .results{
-      display:grid;
-      gap:18px;
-    }
+.result-info{
+  margin-bottom:20px;
+  opacity:0.75;
+  font-size:14px;
+}
 
-    .card{
-      background:rgba(255,255,255,0.07);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:24px;
-      padding:22px;
-      transition:0.25s;
-      position:relative;
-      overflow:hidden;
-      animation:fadeUp 0.4s ease;
-    }
+.results{
+  display:grid;
+  gap:18px;
+}
 
-    .card:hover{
-      transform:translateY(-4px);
-      background:rgba(255,255,255,0.11);
-      border-color:rgba(255,179,71,0.25);
-    }
+.card{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:22px;
+  transition:0.25s;
+}
 
-    .kode{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(90deg,#ffcc70,#ff9f43);
-      color:#222;
-      font-weight:700;
-      padding:6px 14px;
-      border-radius:999px;
-      font-size:13px;
-      margin-bottom:14px;
-    }
+.card:hover{
+  transform:translateY(-4px);
+  background:rgba(255,255,255,0.11);
+  border-color:rgba(255,179,71,0.25);
+}
 
-    .profesi{
-      font-size:24px;
-      font-weight:600;
-      margin-bottom:10px;
-      line-height:1.4;
-    }
+.kode{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg,#ffcc70,#ff9f43);
+  color:#222;
+  font-weight:700;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:13px;
+  margin-bottom:14px;
+}
 
-    .keyword{
-      opacity:0.7;
-      font-size:14px;
-      line-height:1.8;
-    }
+.profesi{
+  font-size:24px;
+  font-weight:600;
+  margin-bottom:10px;
+  line-height:1.5;
+}
 
-    .empty{
-      text-align:center;
-      opacity:0.65;
-      margin-top:60px;
-      line-height:1.8;
-    }
+.keyword{
+  opacity:0.7;
+  font-size:14px;
+  line-height:1.8;
+}
 
-    .footer{
-      margin-top:60px;
-      text-align:center;
-      opacity:0.45;
-      font-size:13px;
-    }
+.empty{
+  text-align:center;
+  opacity:0.65;
+  margin-top:60px;
+  line-height:1.8;
+}
 
-    .loading{
-      text-align:center;
-      margin-top:60px;
-      opacity:0.6;
-    }
+.loading{
+  text-align:center;
+  margin-top:60px;
+  opacity:0.65;
+}
 
-    .badge{
-      display:inline-block;
-      margin-top:12px;
-      padding:6px 14px;
-      border-radius:999px;
-      background:rgba(255,179,71,0.12);
-      color:#ffcc70;
-      font-size:12px;
-      border:1px solid rgba(255,179,71,0.15);
-    }
+.footer{
+  margin-top:60px;
+  text-align:center;
+  opacity:0.45;
+  font-size:13px;
+}
 
-    @keyframes fadeUp{
-      from{
-        opacity:0;
-        transform:translateY(15px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
+@media(max-width:768px){
 
-    @media(max-width:768px){
+  .logo{
+    font-size:42px;
+  }
 
-      .logo{
-        font-size:42px;
-      }
+  .profesi{
+    font-size:20px;
+  }
 
-      .profesi{
-        font-size:20px;
-      }
+  .search-input{
+    font-size:16px;
+    padding:18px 20px;
+  }
 
-      .search-input{
-        font-size:16px;
-        padding:18px 20px;
-      }
+}
 
-      .card{
-        padding:18px;
-      }
-
-    }
-
-  </style>
+</style>
 </head>
+
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="hero">
-      <div class="logo">🍡 MOCHIPRO6171</div>
+  <div class="hero">
 
-      <div class="subtitle">
-        Mesin Otomatis Coding Hasil Isian Profesi<br>
-        Smart Search Kode Profesi SE2026 berbasis keyword dan pencarian cerdas.
-      </div>
-
-      <div class="badge">
-        Powered by Google Spreadsheet
-      </div>
+    <div class="logo">
+      🍡 MOCHIPRO6171
     </div>
 
-    <div class="search-container">
-
-      <div class="search-box">
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="Cari profesi... contoh: jual online, guru, kopi, satpam, ojek"
-        >
-      </div>
-
+    <div class="subtitle">
+      Mesin Otomatis Coding Hasil Isian Profesi<br>
+      Smart Search Kode Profesi SE2026 berbasis keyword dan pencarian cerdas.
     </div>
 
-    <div class="result-info" id="resultInfo"></div>
-
-    <div class="results" id="results"></div>
-
-    <div class="footer">
-      MOCHIPRO6171 • Smart Coding Profesi SE2026
+    <div class="badge">
+      Powered by Google Spreadsheet
     </div>
 
   </div>
+
+  <div class="search-container">
+
+    <input
+      type="text"
+      id="searchInput"
+      class="search-input"
+      placeholder="Cari profesi... contoh: guru, jual online, satpam, kopi, ojek"
+    >
+
+  </div>
+
+  <div class="result-info" id="resultInfo"></div>
+
+  <div class="results" id="results"></div>
+
+  <div class="footer">
+    MOCHIPRO6171 • Smart Coding Profesi SE2026
+  </div>
+
+</div>
 
 <script>
 
@@ -260,7 +239,7 @@ const SHEET_ID = '1IkV4zeEJ0k2P_xdMZGrLrWZrvG-tvahDLO5hRf8yxXQ';
 const SHEET_NAME = 'DATA';
 
 const CSV_URL =
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
+`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
 let database = [];
 
@@ -276,9 +255,19 @@ async function loadData(){
       `<div class="loading">🍡 Memuat database profesi...</div>`;
 
     const response = await fetch(CSV_URL);
-    const csv = await response.text();
 
-    database = parseCSV(csv);
+    const csvText = await response.text();
+
+    const parsed = Papa.parse(csvText,{
+      header:true,
+      skipEmptyLines:true
+    });
+
+    database = parsed.data.map(item => ({
+      kode: item.kode || '',
+      profesi: item.profesi || '',
+      keyword: item.keyword || ''
+    }));
 
     resultsContainer.innerHTML = `
       <div class="empty">
@@ -293,7 +282,7 @@ async function loadData(){
 
     resultsContainer.innerHTML = `
       <div class="empty">
-        Gagal memuat database spreadsheet.
+        Gagal memuat database spreadsheet 😢
       </div>
     `;
 
@@ -301,48 +290,12 @@ async function loadData(){
 
 }
 
-function parseCSV(csv){
-
-  const lines = csv.split('\\n');
-
-  const data = [];
-
-  for(let i=1;i<lines.length;i++){
-
-    const row = lines[i];
-
-    if(!row.trim()) continue;
-
-    const cols = row.match(/(\".*?\"|[^\",\\s]+)(?=\\s*,|\\s*$)/g);
-
-    if(!cols || cols.length < 2) continue;
-
-    data.push({
-      kode: clean(cols[0]),
-      profesi: clean(cols[1]),
-      keyword: clean(cols[2] || '')
-    });
-
-  }
-
-  return data;
-
-}
-
-function clean(str){
-
-  return str
-    .replace(/^\"|\"$/g,'')
-    .replace(/\"\"/g,'"')
-    .trim();
-
-}
-
 function normalize(text){
 
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\\s]/g,'')
+    .replace(/[^a-z0-9\\s]/g,' ')
+    .replace(/\\s+/g,' ')
     .trim();
 
 }
@@ -360,16 +313,18 @@ function calculateScore(query,item){
 
   queryWords.forEach(word=>{
 
+    if(word.length < 2) return;
+
     if(profesi.includes(word)){
-      score += 12;
+      score += 15;
     }
 
     if(keyword.includes(word)){
-      score += 20;
+      score += 25;
     }
 
     if(item.kode.includes(word)){
-      score += 50;
+      score += 100;
     }
 
   });
@@ -379,7 +334,7 @@ function calculateScore(query,item){
   }
 
   if(keyword.includes(query)){
-    score += 100;
+    score += 120;
   }
 
   return score;
@@ -403,11 +358,11 @@ function search(query){
   }
 
   const ranked = database
-    .map(item=>({
+    .map(item => ({
       ...item,
       score: calculateScore(query,item)
     }))
-    .filter(item=>item.score > 0)
+    .filter(item => item.score > 0)
     .sort((a,b)=>b.score-a.score)
     .slice(0,20);
 
@@ -468,4 +423,3 @@ loadData();
 
 </body>
 </html>
-```
