@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 
 <style>
 
@@ -27,12 +28,11 @@ body{
     linear-gradient(135deg,#151515,#222222);
   min-height:100vh;
   color:white;
-  overflow-x:hidden;
 }
 
 .container{
   width:100%;
-  max-width:1000px;
+  max-width:1100px;
   margin:auto;
   padding:40px 20px 80px;
 }
@@ -43,25 +43,22 @@ body{
 }
 
 .logo{
-  font-size:58px;
+  font-size:60px;
   font-weight:700;
   background:linear-gradient(90deg,#ffcc70,#ff9f43);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
 .subtitle{
   opacity:0.8;
-  font-size:15px;
   line-height:1.8;
-  max-width:700px;
-  margin:auto;
 }
 
 .badge{
   display:inline-block;
-  margin-top:16px;
+  margin-top:15px;
   padding:6px 14px;
   border-radius:999px;
   background:rgba(255,179,71,0.12);
@@ -102,8 +99,7 @@ body{
 
 .result-info{
   margin-bottom:20px;
-  opacity:0.75;
-  font-size:14px;
+  opacity:0.8;
 }
 
 .results{
@@ -116,56 +112,88 @@ body{
   border:1px solid rgba(255,255,255,0.08);
   border-radius:24px;
   padding:22px;
-  transition:0.25s;
+  transition:0.3s;
 }
 
 .card:hover{
   transform:translateY(-4px);
-  background:rgba(255,255,255,0.11);
-  border-color:rgba(255,179,71,0.25);
+  background:rgba(255,255,255,0.1);
 }
 
 .kode{
   display:inline-flex;
-  align-items:center;
-  justify-content:center;
   background:linear-gradient(90deg,#ffcc70,#ff9f43);
   color:#222;
-  font-weight:700;
   padding:6px 14px;
   border-radius:999px;
+  font-weight:700;
   font-size:13px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .profesi{
   font-size:24px;
   font-weight:600;
-  margin-bottom:10px;
-  line-height:1.5;
+  margin-bottom:12px;
 }
 
 .keyword{
-  opacity:0.7;
+  opacity:0.72;
+  line-height:1.8;
   font-size:14px;
-  line-height:1.8;
 }
 
-.empty{
-  text-align:center;
-  opacity:0.65;
-  margin-top:60px;
-  line-height:1.8;
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
 }
 
+.meta-pill{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  background:rgba(255,179,71,0.12);
+  border:1px solid rgba(255,179,71,0.15);
+  color:#ffcc70;
+}
+
+.related-box{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px dashed rgba(255,255,255,0.1);
+}
+
+.related-title{
+  font-size:13px;
+  opacity:0.7;
+  margin-bottom:10px;
+}
+
+.related-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.related-item{
+  background:rgba(255,255,255,0.08);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+}
+
+.empty,
 .loading{
   text-align:center;
-  margin-top:60px;
-  opacity:0.65;
+  opacity:0.7;
+  margin-top:50px;
+  line-height:1.8;
 }
 
 .footer{
-  margin-top:60px;
+  margin-top:70px;
   text-align:center;
   opacity:0.45;
   font-size:13px;
@@ -190,7 +218,6 @@ body{
 
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -203,11 +230,11 @@ body{
 
     <div class="subtitle">
       Mesin Otomatis Coding Hasil Isian Profesi<br>
-      Smart Search Kode Profesi SE2026 berbasis keyword dan pencarian cerdas.
+      AI Smart Search Kode Profesi SE2026
     </div>
 
     <div class="badge">
-      Powered by Google Spreadsheet
+      AI Semantic Search + NLP Indonesia
     </div>
 
   </div>
@@ -218,7 +245,7 @@ body{
       type="text"
       id="searchInput"
       class="search-input"
-      placeholder="Cari profesi... contoh: guru, jual online, satpam, kopi, ojek"
+      placeholder="Cari pekerjaan... contoh: jual online, ngojek, guru les, tukang kopi"
     >
 
   </div>
@@ -228,7 +255,7 @@ body{
   <div class="results" id="results"></div>
 
   <div class="footer">
-    MOCHIPRO6171 • Smart Coding Profesi SE2026
+    MOCHIPRO6171 • AI Occupation Matching Engine
   </div>
 
 </div>
@@ -242,17 +269,104 @@ const CSV_URL =
 `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
 let database = [];
+let fuse;
+
+const hierarchyMap = {
+
+  'transportasi': [
+    'Pengemudi Ojek Online',
+    'Pengemudi Ojek Pangkalan',
+    'Sopir',
+    'Kurir',
+    'Pilot',
+    'Pramugara/i',
+    'Kapten Kapal',
+    'Nakhoda'
+  ],
+
+  'kesehatan': [
+    'Dokter Umum',
+    'Dokter Gigi',
+    'Dokter Spesialis',
+    'Perawat',
+    'Bidan',
+    'Psikiater',
+    'Psikolog',
+    'Apoteker'
+  ],
+
+  'pendidikan': [
+    'Guru',
+    'Dosen',
+    'Pelatih/Instruktur Olahraga'
+  ],
+
+  'perdagangan': [
+    'Pedagang',
+    'Pedagang Online',
+    'Pedagang Asongan/Keliling Makanan',
+    'Pedagang Asongan/Keliling Nonmakanan',
+    'Pekerja Profesional Penjualan'
+  ],
+
+  'pemerintahan': [
+    'Presiden',
+    'Menteri/Kepala Badan (setingkat Menteri)/Wakil Menteri/Wakil Kepala Badan',
+    'Gubernur',
+    'Walikota',
+    'Bupati',
+    'Camat',
+    'Kepala Desa',
+    'Perangkat Desa'
+  ]
+
+};
+
+const synonymMap = {
+
+  'ngajar': 'guru',
+  'ngojek': 'ojek online',
+  'gojek': 'ojek online',
+  'grab': 'ojek online',
+  'jualan': 'pedagang',
+  'barber': 'tukang cukur',
+  'mua': 'penata rias',
+  'driver': 'sopir',
+  'ngecat': 'tukang cat',
+  'masak': 'juru masak',
+  'kopi': 'barista',
+  'coding': 'programmer',
+  'programming': 'programmer',
+  'konten': 'kreator konten',
+  'youtube': 'kreator konten',
+  'tiktok': 'kreator konten',
+  'ngejahit': 'penjahit'
+
+};
 
 const searchInput = document.getElementById('searchInput');
 const resultsContainer = document.getElementById('results');
 const resultInfo = document.getElementById('resultInfo');
+
+const fuseOptions = {
+  includeScore: true,
+  threshold: 0.4,
+  ignoreLocation: true,
+  minMatchCharLength: 2,
+
+  keys: [
+    { name: 'kode', weight: 0.3 },
+    { name: 'profesi', weight: 0.7 },
+    { name: 'keyword', weight: 1 }
+  ]
+};
 
 async function loadData(){
 
   try{
 
     resultsContainer.innerHTML =
-      `<div class="loading">🍡 Memuat database profesi...</div>`;
+      `<div class="loading">🍡 Memuat database AI profesi...</div>`;
 
     const response = await fetch(CSV_URL);
 
@@ -269,10 +383,12 @@ async function loadData(){
       keyword: item.keyword || ''
     }));
 
+    fuse = new Fuse(database, fuseOptions);
+
     resultsContainer.innerHTML = `
       <div class="empty">
-        🍡 Database profesi berhasil dimuat.<br>
-        Mulai ketik kata kunci pekerjaan untuk mencari rekomendasi profesi.
+        🍡 AI profession engine berhasil dimuat.<br>
+        Mulai ketik pekerjaan untuk mencari rekomendasi profesi.
       </div>
     `;
 
@@ -294,47 +410,76 @@ function normalize(text){
 
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\\s]/g,' ')
-    .replace(/\\s+/g,' ')
+    .replace(/[^a-z0-9\s]/g,' ')
+    .replace(/\s+/g,' ')
     .trim();
 
 }
 
-function calculateScore(query,item){
+function applyNLP(query){
 
   query = normalize(query);
 
-  const profesi = normalize(item.profesi);
-  const keyword = normalize(item.keyword);
+  Object.keys(synonymMap).forEach(key => {
 
-  let score = 0;
+    const regex = new RegExp(`\\b${key}\\b`, 'g');
 
-  const queryWords = query.split(' ');
-
-  queryWords.forEach(word=>{
-
-    if(word.length < 2) return;
-
-    if(profesi.includes(word)){
-      score += 15;
-    }
-
-    if(keyword.includes(word)){
-      score += 25;
-    }
-
-    if(item.kode.includes(word)){
-      score += 100;
-    }
+    query = query.replace(regex, synonymMap[key]);
 
   });
 
-  if(profesi.includes(query)){
-    score += 80;
+  return query;
+
+}
+
+function getHierarchy(profesi){
+
+  for(const category in hierarchyMap){
+
+    if(hierarchyMap[category].includes(profesi)){
+      return category;
+    }
+
   }
 
-  if(keyword.includes(query)){
-    score += 120;
+  return 'lainnya';
+
+}
+
+function getRelatedProfessions(profesi){
+
+  const category = getHierarchy(profesi);
+
+  if(category === 'lainnya') return [];
+
+  return hierarchyMap[category]
+    .filter(item => item !== profesi)
+    .slice(0,4);
+
+}
+
+function semanticBoost(query, item){
+
+  let score = 0;
+
+  const q = normalize(query);
+
+  const hierarchy = getHierarchy(item.profesi);
+
+  if(q.includes('transport') && hierarchy === 'transportasi'){
+    score += 20;
+  }
+
+  if(q.includes('kesehatan') && hierarchy === 'kesehatan'){
+    score += 20;
+  }
+
+  if(q.includes('ngajar') && hierarchy === 'pendidikan'){
+    score += 20;
+  }
+
+  if(q.includes('jualan') && hierarchy === 'perdagangan'){
+    score += 20;
   }
 
   return score;
@@ -357,24 +502,38 @@ function search(query){
 
   }
 
-  const ranked = database
-    .map(item => ({
-      ...item,
-      score: calculateScore(query,item)
-    }))
-    .filter(item => item.score > 0)
-    .sort((a,b)=>b.score-a.score)
+  if(!fuse) return;
+
+  const processedQuery = applyNLP(query);
+
+  let results = fuse.search(processedQuery)
+    .map(result => {
+
+      const semanticScore = semanticBoost(processedQuery, result.item);
+
+      const aiScore =
+        Math.round(
+          ((1 - result.score) * 100) + semanticScore
+        );
+
+      return {
+        ...result.item,
+        aiScore,
+        related: getRelatedProfessions(result.item.profesi),
+        hierarchy: getHierarchy(result.item.profesi)
+      };
+
+    })
+    .sort((a,b)=>b.aiScore-a.aiScore)
     .slice(0,20);
 
-  renderResults(ranked,query);
+  renderResults(results,query,processedQuery);
 
 }
 
-function renderResults(results,query){
+function renderResults(results,originalQuery,processedQuery){
 
   if(results.length === 0){
-
-    resultInfo.innerHTML = '';
 
     resultsContainer.innerHTML = `
       <div class="empty">
@@ -386,8 +545,14 @@ function renderResults(results,query){
 
   }
 
-  resultInfo.innerHTML =
-    `Ditemukan ${results.length} rekomendasi profesi untuk keyword <b>"${query}"</b>`;
+  resultInfo.innerHTML = `
+    Ditemukan ${results.length} rekomendasi profesi untuk:
+    <b>"${originalQuery}"</b>
+    ${processedQuery !== originalQuery
+      ? `<br><small>AI NLP memahami sebagai: <b>${processedQuery}</b></small>`
+      : ''
+    }
+  `;
 
   resultsContainer.innerHTML = results.map(item=>`
 
@@ -405,6 +570,41 @@ function renderResults(results,query){
         ${item.keyword || '-'}
       </div>
 
+      <div class="meta-row">
+
+        <div class="meta-pill">
+          🤖 AI Match ${Math.min(item.aiScore,99)}%
+        </div>
+
+        <div class="meta-pill">
+          🧠 ${item.hierarchy}
+        </div>
+
+      </div>
+
+      ${item.related.length > 0
+        ? `
+          <div class="related-box">
+
+            <div class="related-title">
+              Profesi terkait:
+            </div>
+
+            <div class="related-list">
+
+              ${item.related.map(rel => `
+                <div class="related-item">
+                  ${rel}
+                </div>
+              `).join('')}
+
+            </div>
+
+          </div>
+        `
+        : ''
+      }
+
     </div>
 
   `).join('');
@@ -412,9 +612,7 @@ function renderResults(results,query){
 }
 
 searchInput.addEventListener('input',(e)=>{
-
   search(e.target.value);
-
 });
 
 loadData();
